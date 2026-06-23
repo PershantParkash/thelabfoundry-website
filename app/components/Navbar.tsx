@@ -1,81 +1,172 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from "next/image";
 
-const links = [
-  { label: 'Home', href: '#hero' },
-  { label: 'Services', href: '#services' },
-  { label: 'Process', href: '#process' },
-  { label: 'Contact', href: '#contact' },
-];
+const solutions = {
+  columns: [
+    {
+      title: 'Operations System',
+      subtitle: 'Run your restaurant smoothly',
+      items: [
+        { name: 'Live Order Queue', desc: 'Real-time kitchen order management', href: '#' },
+        { name: 'Order Management System', desc: 'Centralized incoming orders from all channels', href: '#' },
+        { name: 'Staff Workflow System', desc: 'Task assignment + kitchen coordination', href: '#' },
+        { name: 'Operations Dashboard', desc: 'Daily performance + insights', href: '#' },
+      ],
+    },
+    {
+      title: 'Customer Experience System',
+      subtitle: 'Make ordering effortless',
+      items: [
+        { name: 'QR Table Ordering', desc: 'Scan & order from table', href: '#' },
+        { name: 'Website Ordering System', desc: 'Branded online ordering website', href: '#' },
+        { name: 'Mobile App Ordering', desc: 'Customer app for repeat ordering', href: '#' },
+        { name: 'WhatsApp Ordering System', desc: 'Order directly via WhatsApp automation', href: '#' },
+        { name: 'Digital Menu System', desc: 'Live updated menu for customers', href: '#' },
+      ],
+    },
+    {
+      title: 'Growth & Retention System',
+      subtitle: 'Increase revenue & repeat customers',
+      items: [
+        { name: 'Customer Retention Engine', desc: 'Bring customers back automatically', href: '#' },
+        { name: 'Marketing Automation System', desc: 'Campaigns + promotions automation', href: '#' },
+        { name: 'Review Growth System', desc: 'Increase Google reviews & ratings', href: '#' },
+        { name: 'Customer CRM System', desc: 'Track customers + order history', href: '#' },
+      ],
+    },
+  ],
+};
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
+  const solutionsRef = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMenuOpen(false);
+    setSolutionsOpen(false);
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const openSolutions = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setSolutionsOpen(true);
+  };
+
+  const closeSolutions = () => {
+    closeTimer.current = setTimeout(() => setSolutionsOpen(false), 100);
+  };
+
+  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current); }, []);
+
   return (
     <>
-      <motion.nav
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? 'bg-[#0A0A0A]/90 backdrop-blur-xl border-b border-white/[0.06]'
-            : 'bg-transparent'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 h-16" style={{ fontFamily: "var(--font-nunito)" }}>
+        <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
           {/* Logo */}
-          {/* <a href="#hero" onClick={(e) => handleNav(e, '#hero')} className="flex items-center gap-2.5 group">
-            <div className="w-7 h-7 rounded-lg bg-[#6D5DFC] flex items-center justify-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#8B7FFF] to-[#5B4CE8]" />
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="relative z-10">
-                <path d="M2 7L6 3L10 7L6 11L2 7Z" fill="white" fillOpacity="0.9"/>
-                <path d="M6 3L10 7L7 10" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-            </div>
-            <span className="text-white font-medium text-sm tracking-wide">The Lab Foundry</span>
-          </a> */}
-
-             <Image
-          src="/logo.png"
-          alt="TwinkleOfficial"
-          width={140}
-          height={70}
-          style={{ width: "80px", height: "auto" }}
-          loading="eager"
-          priority
-        />
+          <Image
+            src="/logo2.png"
+            alt="TwinkleOfficial"
+            width={140}
+            height={70}
+            style={{ width: '80px', height: 'auto' }}
+            loading="eager"
+            priority
+          />
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-1">
-            {links.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => handleNav(e, link.href)}
-                className="px-4 py-2 text-sm text-[#A1A1AA] hover:text-white transition-colors duration-200 relative group"
-              >
-                {link.label}
-                <span className="absolute bottom-1 left-4 right-4 h-px bg-[#6D5DFC] scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left" />
-              </a>
-            ))}
+            <a
+              href="#hero"
+              onClick={(e) => handleNav(e, '#hero')}
+              className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-150"
+            >
+              Home
+            </a>
+
+            <a
+              href="#process"
+              onClick={(e) => handleNav(e, '#process')}
+              className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-150"
+            >
+              Process
+            </a>
+
+            <div
+              ref={solutionsRef}
+              className="relative"
+              onMouseEnter={openSolutions}
+              onMouseLeave={closeSolutions}
+            >
+              <button className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-150">
+                Our Solutions
+                <svg
+                  className={`w-3.5 h-3.5 transition-transform duration-200 ${solutionsOpen ? 'rotate-180' : ''}`}
+                  viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"
+                  strokeLinecap="round" strokeLinejoin="round"
+                >
+                  <path d="M4 6l4 4 4-4" />
+                </svg>
+              </button>
+
+              {/* Mega Menu */}
+              <AnimatePresence>
+                {solutionsOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    onMouseEnter={openSolutions}
+                    onMouseLeave={closeSolutions}
+                    className="fixed left-0 right-0 top-16 bg-white border-t border-b border-gray-200 shadow-lg z-40"
+                    style={{ fontFamily: "var(--font-nunito)" }}
+                  >
+                    <div className="max-w-7xl mx-auto px-6 py-8 grid grid-cols-3">
+                      {solutions.columns.map((col, i) => (
+                        <div
+                          key={col.title}
+                          className={`px-8 ${i !== 0 ? 'border-l border-gray-100' : 'pl-0'} ${i === solutions.columns.length - 1 ? 'pr-0' : ''}`}
+                        >
+                          <div className="text-xs font-bold text-[#6D5DFC] uppercase tracking-widest mb-1" style={{ fontFamily: "var(--font-nunito)" }}>
+                            {col.title}
+                          </div>
+                          <div className="text-xs text-gray-400 mb-5">{col.subtitle}</div>
+                          <div className="flex flex-col gap-0.5">
+                            {col.items.map((item) => (
+                              <a
+                                key={item.name}
+                                href={item.href}
+                                className="flex flex-col px-2.5 py-2 rounded-lg hover:bg-indigo-50 transition-colors duration-100 group"
+                              >
+                                <span className="text-sm font-medium text-gray-800 group-hover:text-[#6D5DFC] transition-colors">
+                                  {item.name}
+                                </span>
+                                <span className="text-xs text-gray-400 mt-0.5">{item.desc}</span>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <a
+              href="#pricing"
+              onClick={(e) => handleNav(e, '#pricing')}
+              className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-150"
+            >
+              Pricing
+            </a>
           </div>
 
           {/* CTA + Hamburger */}
@@ -83,11 +174,11 @@ export default function Navbar() {
             <a
               href="#contact"
               onClick={(e) => handleNav(e, '#contact')}
-              className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-[#6D5DFC] hover:bg-[#7D6DFF] text-white text-sm font-medium transition-all duration-200 hover:shadow-lg hover:shadow-[#6D5DFC]/20 active:scale-95"
+              className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-[#6D5DFC] hover:bg-[#5B4CE8] text-white text-sm font-medium transition-all duration-200 hover:shadow-lg hover:shadow-[#6D5DFC]/25 active:scale-95"
             >
               Book a Call
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2 6H10M6 2L10 6L6 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 6H10M6 2L10 6L6 10" />
               </svg>
             </a>
 
@@ -95,13 +186,13 @@ export default function Navbar() {
               className="md:hidden w-8 h-8 flex flex-col items-center justify-center gap-1.5"
               onClick={() => setMenuOpen(!menuOpen)}
             >
-              <span className={`block w-5 h-px bg-white transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
-              <span className={`block w-5 h-px bg-white transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
-              <span className={`block w-5 h-px bg-white transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-1.5' : ''}`} />
+              <span className={`block w-5 h-px bg-gray-800 transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
+              <span className={`block w-5 h-px bg-gray-800 transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
+              <span className={`block w-5 h-px bg-gray-800 transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-1.5' : ''}`} />
             </button>
           </div>
         </div>
-      </motion.nav>
+      </nav>
 
       {/* Mobile Menu */}
       <AnimatePresence>
@@ -111,19 +202,35 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-16 z-40 bg-[#111111]/95 backdrop-blur-xl border-b border-white/[0.06] md:hidden"
+            className="fixed inset-x-0 top-16 z-40 bg-white border-b border-gray-200 shadow-lg md:hidden overflow-y-auto max-h-[80vh]"
+              style={{ fontFamily: "var(--font-nunito)" }} 
           >
-            <div className="px-6 py-6 flex flex-col gap-2">
-              {links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => handleNav(e, link.href)}
-                  className="py-3 text-[#A1A1AA] hover:text-white text-sm transition-colors border-b border-white/[0.04]"
-                >
-                  {link.label}
-                </a>
-              ))}
+            <div className="px-6 py-6 flex flex-col gap-1">
+              <a href="#hero" onClick={(e) => handleNav(e, '#hero')} className="py-3 text-sm font-medium text-gray-700 border-b border-gray-100">Home</a>
+              <a href="#process" onClick={(e) => handleNav(e, '#process')} className="py-3 text-sm font-medium text-gray-700 border-b border-gray-100">Process</a>
+
+              <div className="py-3 border-b border-gray-100" style={{ fontFamily: "var(--font-nunito)" }}>
+                <div className="text-sm font-semibold text-gray-900 mb-3">Our Solutions</div>
+                {solutions.columns.map((col) => (
+                  <div key={col.title} className="mb-5" style={{ fontFamily: "var(--font-nunito)" }}>
+                    <div className="text-xs font-bold text-[#6D5DFC] uppercase tracking-widest mb-2">
+                      {col.title}
+                    </div>
+                    {col.items.map((item) => (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        className="block py-2 pl-2 text-sm text-gray-600 hover:text-[#6D5DFC] transition-colors"
+                      >
+                        {item.name}
+                      </a>
+                    ))}
+                  </div>
+                ))}
+              </div>
+
+              <a href="#pricing" onClick={(e) => handleNav(e, '#pricing')} className="py-3 text-sm font-medium text-gray-700 border-b border-gray-100">Pricing</a>
+
               <a
                 href="#contact"
                 onClick={(e) => handleNav(e, '#contact')}
