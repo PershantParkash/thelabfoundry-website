@@ -73,14 +73,14 @@ export default function BookACall() {
           {/* Host */}
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6D5DFC] to-[#A855F7] flex items-center justify-center text-white font-bold text-lg shrink-0">
-              P
+              S
             </div>
             <div>
               <p className="text-sm font-bold text-gray-900"   style={{ fontFamily: "var(--font-nunito)" }}>
-                Pershant Parkash
+                Sagar kumar
               </p>
               <p className="text-xs text-gray-500"   style={{ fontFamily: "var(--font-nunito)" }}>
-                Founder & Operations Strategist
+                Founder 
               </p>
             </div>
           </div>
@@ -104,7 +104,7 @@ export default function BookACall() {
                   <polyline points="12 6 12 12 16 14" />
                 </svg>
               </span>
-              60 Minutes
+              45 Minutes
             </div>
             <div className="flex items-center gap-2.5 text-sm text-gray-600"   style={{ fontFamily: "var(--font-nunito)" }}>
               <span className="shrink-0 text-[#6D5DFC]" >
