@@ -29,7 +29,6 @@ export default function Hero() {
           style={{ fontFamily: "var(--font-nunito)" }}
           className="inline-flex items-center gap-2 rounded-full border border-[#fff]/80 bg-[#6D5DFC]/5 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-[#fff] mb-2"
         >
-          {/* <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> */}
           Restaurant Operations & Growth
         </span>
      
