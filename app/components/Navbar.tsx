@@ -91,7 +91,7 @@ export default function Navbar() {
           <span className="hidden sm:inline-block bg-white/20 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
             Free
           </span>
-          Book a 45-min call to audit your restaurant operations! no cost, no commitment
+          Book a 45-min call to audit your restaurant operations! 
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
             <path d="M2 6H10M6 2L10 6L6 10" />
           </svg>
