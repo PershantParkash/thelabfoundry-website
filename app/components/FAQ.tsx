@@ -67,7 +67,7 @@ export default function FAQ() {
               If something isn't covered here, bring it to the audit call. We'll walk through it together.
             </p>
             <a
-              href="#contact"
+              href="#audit"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#A855F7] text-sm font-medium text-white shadow-[0_8px_24px_-8px_rgba(124,58,237,0.5)] hover:from-[#6D28D9] hover:to-[#9333EA] transition-all duration-200"
             >
               Book a Free Audit

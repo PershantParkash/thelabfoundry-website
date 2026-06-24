@@ -89,7 +89,7 @@ const solutions: Solution[] = [
     ],
     forWho:
       "Owner-operators who are personally plugging every gap, and managers who want to delegate without losing visibility.",
-    images: ["/taskassigner.jpg", "/taskassigner2.jpg", "/taskassigner3.jpg"],
+    images: ["/taskassigner.jpg", "/taskassigner2.jpg",],
   },
   {
     id: "ops-dashboard",
@@ -327,7 +327,7 @@ function ImageScroller({ images }: { images: string[] }) {
             <img
               src={src}
               alt={`Screenshot ${i + 1}`}
-              className="w-full h-full object-cover"
+              className="w-full h-auto object-cover"
             />
           </div>
         ))}
@@ -370,8 +370,6 @@ function ImageScroller({ images }: { images: string[] }) {
   );
 }
 
-// Replace your entire DetailModal function with this:
-
 function DetailModal({
   solution,
   onClose,
@@ -407,26 +405,25 @@ function DetailModal({
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6"
       onClick={onClose}
     >
-      {/* Backdrop */}
       <div className="absolute inset-0 bg-[#1C1B19]/60 backdrop-blur-sm" />
 
-      {/* Modal */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 40 }}
         transition={{ type: "spring", stiffness: 380, damping: 34 }}
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full sm:max-w-7xl bg-white sm:rounded-2xl shadow-2xl flex flex-col rounded-t-2xl"
-        style={{ maxHeight: "92vh", height: "92vh" }}
+        className="relative w-full sm:max-w-3xl bg-white sm:rounded-2xl shadow-2xl flex flex-col rounded-t-2xl"
+        style={{ maxHeight: "92vh" }}
       >
-        {/* ── Fixed Header ── */}
-        <div className="flex-shrink-0 border-b border-[#1C1B19]/10 px-5 sm:px-7 pt-5 pb-4">
+
+        {/* ── Header ── */}
+        <div className="flex-shrink-0 px-5 sm:px-7 pt-5 pb-4 border-b border-[#1C1B19]/10">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-start gap-3 min-w-0">
               <div
                 className="flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center"
-                style={{ backgroundColor: "#6D5DFC" }}
+                style={{ backgroundColor: accent }}
               >
                 <Icon size={18} color="white" strokeWidth={1.75} />
               </div>
@@ -444,7 +441,7 @@ function DetailModal({
                   </span>
                 </div>
                 <h2
-                  className="font-bold text-[#1C1B19] leading-tight text-lg sm:text-2xl"
+                  className="font-bold text-[#1C1B19] leading-tight text-lg sm:text-xl"
                   style={{ fontFamily: "var(--font-jakarta)" }}
                 >
                   {solution.title}
@@ -459,36 +456,58 @@ function DetailModal({
               <X size={15} strokeWidth={2.2} color="#1C1B19" />
             </button>
           </div>
+
+          {/* Impact banner */}
+          <div
+            className="mt-4 flex items-center gap-2 px-3 py-2.5 rounded-xl border"
+            style={{
+              backgroundColor: `${accent}0F`,
+              borderColor: `${accent}30`,
+            }}
+          >
+            <ArrowUpRight size={14} color={accent} strokeWidth={2.5} />
+            <span className="text-sm font-semibold" style={{ color: "#1C1B19" }}>
+              {solution.impact}
+            </span>
+          </div>
         </div>
 
-        {/* ── Single scrollable body ── */}
+        {/* ── Scrollable body ── */}
         <div className="flex-1 overflow-y-auto overscroll-contain">
 
-          {/* ─ MOBILE layout: single column stack ─ */}
-          <div className="lg:hidden flex flex-col">
-
-            {/* 1. Image */}
-            {solution.images.length > 0 && (
-              <div className="px-5 pt-5">
-                <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-3">
-                  Preview
-                </p>
-                <ImageScroller images={solution.images} />
-              </div>
-            )}
-
-            {/* 2. Impact badge */}
-            <div className="px-5 pt-4">
-              <div className="inline-flex items-center gap-2 border border-[#1C1B19]/12 rounded-md px-3 py-1.5 bg-[#F7F5F1]">
-                <ArrowUpRight size={13} color={accent} strokeWidth={2.25} />
-                <span className="text-xs font-mono uppercase tracking-wide text-[#1C1B19]/70">
-                  {solution.impact}
-                </span>
-              </div>
+          {/* Preview images */}
+          {solution.images.length > 0 && (
+            <div className="px-5 sm:px-7 pt-5 pb-2">
+              <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-3">
+                Preview
+              </p>
+              <ImageScroller images={solution.images} />
             </div>
+          )}
 
-            {/* 3. How it works */}
-            <div className="px-5 pt-6">
+          {/* Problem + Best For */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 border-y border-[#1C1B19]/8 divide-y sm:divide-y-0 sm:divide-x divide-[#1C1B19]/8">
+            <div className="px-5 sm:px-7 py-5">
+              <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-2.5">
+                The problem
+              </p>
+              <p className="text-sm text-[#1C1B19]/60 leading-relaxed">
+                {solution.problem}
+              </p>
+            </div>
+            <div className="px-5 sm:px-7 py-5">
+              <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-2.5">
+                Best for
+              </p>
+              <p className="text-sm text-[#1C1B19]/60 leading-relaxed">
+                {solution.forWho}
+              </p>
+            </div>
+          </div>
+
+          {/* How it works + What you get */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-[#1C1B19]/8">
+            <div className="px-5 sm:px-7 py-6">
               <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-4">
                 How it works
               </p>
@@ -497,11 +516,14 @@ function DetailModal({
                   <li key={i} className="flex gap-3 items-start">
                     <span
                       className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-mono font-bold mt-0.5"
-                      style={{ backgroundColor: `${accent}18`, color: accent }}
+                      style={{
+                        backgroundColor: `${accent}18`,
+                        color: accent,
+                      }}
                     >
                       {i + 1}
                     </span>
-                    <span className="text-[#1C1B19]/70 text-sm leading-relaxed">
+                    <span className="text-sm text-[#1C1B19]/60 leading-relaxed">
                       {step}
                     </span>
                   </li>
@@ -509,8 +531,7 @@ function DetailModal({
               </ol>
             </div>
 
-            {/* 4. What you get */}
-            <div className="px-5 pt-6">
+            <div className="px-5 sm:px-7 py-6">
               <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-4">
                 What you get
               </p>
@@ -523,128 +544,28 @@ function DetailModal({
                     >
                       <Check size={9} color={accent} strokeWidth={3} />
                     </span>
-                    <span className="text-[#1C1B19]/70 text-sm leading-relaxed">
+                    <span className="text-sm text-[#1C1B19]/60 leading-relaxed">
                       {outcome}
                     </span>
                   </li>
                 ))}
               </ul>
             </div>
-
-            {/* 5. Problem + Best for */}
-            <div className="px-5 pt-6 pb-6 flex flex-col gap-4">
-              <div className="bg-[#F7F5F1] rounded-xl border border-[#1C1B19]/8 p-4">
-                <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-2">
-                  The problem
-                </p>
-                <p className="text-[#1C1B19]/70 text-sm leading-relaxed">
-                  {solution.problem}
-                </p>
-              </div>
-              <div className="bg-[#F7F5F1] rounded-xl border border-[#1C1B19]/8 p-4">
-                <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-1.5">
-                  Best for
-                </p>
-                <p className="text-[#1C1B19]/70 text-sm leading-relaxed">
-                  {solution.forWho}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* ─ DESKTOP layout: two columns (unchanged) ─ */}
-          <div className="hidden lg:grid grid-cols-[7fr_3fr] divide-x divide-[#1C1B19]/8">
-            {/* Left: image */}
-            <div className="px-7 py-7 flex flex-col gap-7">
-              {solution.images.length > 0 && (
-                <section>
-                  <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-3">
-                    Preview
-                  </p>
-                  <ImageScroller images={solution.images} />
-                </section>
-              )}
-            </div>
-
-            {/* Right: how it works + outcomes */}
-            <div className="px-7 py-7 flex flex-col gap-8">
-              <section>
-                <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-4">
-                  How it works
-                </p>
-                <ol className="flex flex-col gap-4">
-                  {solution.howItWorks.map((step, i) => (
-                    <li key={i} className="flex gap-3 items-start">
-                      <span
-                        className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-mono font-bold mt-0.5"
-                        style={{ backgroundColor: `${accent}18`, color: accent }}
-                      >
-                        {i + 1}
-                      </span>
-                      <span className="text-[#1C1B19]/70 text-sm leading-relaxed">
-                        {step}
-                      </span>
-                    </li>
-                  ))}
-                </ol>
-              </section>
-
-              <section>
-                <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-4">
-                  What you get
-                </p>
-                <ul className="flex flex-col gap-3">
-                  {solution.outcomes.map((outcome, i) => (
-                    <li key={i} className="flex gap-3 items-start">
-                      <span
-                        className="flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center mt-0.5"
-                        style={{ backgroundColor: `${accent}1F` }}
-                      >
-                        <Check size={9} color={accent} strokeWidth={3} />
-                      </span>
-                      <span className="text-[#1C1B19]/70 text-sm leading-relaxed">
-                        {outcome}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            </div>
-          </div>
-
-          {/* Desktop: problem + best for — below columns */}
-          <div className="hidden lg:grid grid-cols-2 gap-5 px-7 pb-7">
-            <div className="bg-[#F7F5F1] rounded-xl border border-[#1C1B19]/8 p-4">
-              <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-2">
-                The problem
-              </p>
-              <p className="text-[#1C1B19]/70 text-sm leading-relaxed">
-                {solution.problem}
-              </p>
-            </div>
-            <div className="bg-[#F7F5F1] rounded-xl border border-[#1C1B19]/8 p-4">
-              <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-1.5">
-                Best for
-              </p>
-              <p className="text-[#1C1B19]/70 text-sm leading-relaxed">
-                {solution.forWho}
-              </p>
-            </div>
           </div>
         </div>
 
-        {/* ── Fixed Footer CTA ── */}
+        {/* ── Footer CTA ── */}
         <div className="flex-shrink-0 border-t border-[#1C1B19]/10 px-5 sm:px-7 py-4">
           <a
             href="#contact"
             onClick={onClose}
             className="flex items-center justify-center gap-2 w-full px-6 py-3.5 rounded-xl text-white text-sm font-semibold tracking-wide transition-all duration-200 active:scale-[0.98]"
-            style={{ backgroundColor: "#6D5DFC" }}
+            style={{ backgroundColor: accent }}
             onMouseEnter={(e) =>
               (e.currentTarget.style.backgroundColor = "#5849d4")
             }
             onMouseLeave={(e) =>
-              (e.currentTarget.style.backgroundColor = "#6D5DFC")
+              (e.currentTarget.style.backgroundColor = accent)
             }
           >
             Book a call to learn more
@@ -655,6 +576,275 @@ function DetailModal({
     </motion.div>
   );
 }
+// function DetailModal({
+//   solution,
+//   onClose,
+// }: {
+//   solution: Solution;
+//   onClose: () => void;
+// }) {
+//   const Icon = solution.icon;
+//   const accent = tagAccent[solution.tag];
+
+//   useEffect(() => {
+//     document.body.style.overflow = "hidden";
+//     return () => {
+//       document.body.style.overflow = "";
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     const handler = (e: KeyboardEvent) => {
+//       if (e.key === "Escape") onClose();
+//     };
+//     window.addEventListener("keydown", handler);
+//     return () => window.removeEventListener("keydown", handler);
+//   }, [onClose]);
+
+//   return (
+//     <motion.div
+//       key="modal-overlay"
+//       initial={{ opacity: 0 }}
+//       animate={{ opacity: 1 }}
+//       exit={{ opacity: 0 }}
+//       transition={{ duration: 0.2 }}
+//       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6"
+//       onClick={onClose}
+//     >
+//       <div className="absolute inset-0 bg-[#1C1B19]/60 backdrop-blur-sm" />
+
+//       <motion.div
+//         initial={{ opacity: 0, y: 40 }}
+//         animate={{ opacity: 1, y: 0 }}
+//         exit={{ opacity: 0, y: 40 }}
+//         transition={{ type: "spring", stiffness: 380, damping: 34 }}
+//         onClick={(e) => e.stopPropagation()}
+//         className="relative w-full sm:max-w-7xl bg-white sm:rounded-2xl shadow-2xl flex flex-col rounded-t-2xl"
+//         style={{ maxHeight: "92vh", height: "92vh" }}
+//       >
+//         <div className="flex-shrink-0 border-b border-[#1C1B19]/10 px-5 sm:px-7 pt-5 pb-4">
+//           <div className="flex items-start justify-between gap-3">
+//             <div className="flex items-start gap-3 min-w-0">
+//               <div
+//                 className="flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center"
+//                 style={{ backgroundColor: "#6D5DFC" }}
+//               >
+//                 <Icon size={18} color="white" strokeWidth={1.75} />
+//               </div>
+//               <div className="min-w-0">
+//                 <div className="flex items-center gap-2 mb-0.5">
+//                   <span
+//                     className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0"
+//                     style={{ backgroundColor: accent }}
+//                   />
+//                   <span
+//                     className="text-[10px] font-mono uppercase tracking-widest"
+//                     style={{ color: accent }}
+//                   >
+//                     {solution.tag}
+//                   </span>
+//                 </div>
+//                 <h2
+//                   className="font-bold text-[#1C1B19] leading-tight text-lg sm:text-2xl"
+//                   style={{ fontFamily: "var(--font-jakarta)" }}
+//                 >
+//                   {solution.title}
+//                 </h2>
+//               </div>
+//             </div>
+
+//             <button
+//               onClick={onClose}
+//               className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-[#F7F5F1] hover:bg-[#EDEAE5] transition-colors mt-1"
+//             >
+//               <X size={15} strokeWidth={2.2} color="#1C1B19" />
+//             </button>
+//           </div>
+//         </div>
+
+//         <div className="flex-1 overflow-y-auto overscroll-contain">
+
+//           <div className="lg:hidden flex flex-col">
+
+//             {solution.images.length > 0 && (
+//               <div className="px-5 pt-5">
+//                 <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-3">
+//                   Preview
+//                 </p>
+//                 <ImageScroller images={solution.images} />
+//               </div>
+//             )}
+
+//             <div className="px-5 pt-4">
+//               <div className="inline-flex items-center gap-2 border border-[#1C1B19]/12 rounded-md px-3 py-1.5 bg-[#F7F5F1]">
+//                 <ArrowUpRight size={13} color={accent} strokeWidth={2.25} />
+//                 <span className="text-xs font-mono uppercase tracking-wide text-[#1C1B19]/70">
+//                   {solution.impact}
+//                 </span>
+//               </div>
+//             </div>
+
+//             <div className="px-5 pt-6">
+//               <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-4">
+//                 How it works
+//               </p>
+//               <ol className="flex flex-col gap-4">
+//                 {solution.howItWorks.map((step, i) => (
+//                   <li key={i} className="flex gap-3 items-start">
+//                     <span
+//                       className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-mono font-bold mt-0.5"
+//                       style={{ backgroundColor: `${accent}18`, color: accent }}
+//                     >
+//                       {i + 1}
+//                     </span>
+//                     <span className="text-[#1C1B19]/70 text-sm leading-relaxed">
+//                       {step}
+//                     </span>
+//                   </li>
+//                 ))}
+//               </ol>
+//             </div>
+
+//             <div className="px-5 pt-6">
+//               <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-4">
+//                 What you get
+//               </p>
+//               <ul className="flex flex-col gap-3">
+//                 {solution.outcomes.map((outcome, i) => (
+//                   <li key={i} className="flex gap-3 items-start">
+//                     <span
+//                       className="flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center mt-0.5"
+//                       style={{ backgroundColor: `${accent}1F` }}
+//                     >
+//                       <Check size={9} color={accent} strokeWidth={3} />
+//                     </span>
+//                     <span className="text-[#1C1B19]/70 text-sm leading-relaxed">
+//                       {outcome}
+//                     </span>
+//                   </li>
+//                 ))}
+//               </ul>
+//             </div>
+
+//             <div className="px-5 pt-6 pb-6 flex flex-col gap-4">
+//               <div className="bg-[#F7F5F1] rounded-xl border border-[#1C1B19]/8 p-4">
+//                 <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-2">
+//                   The problem
+//                 </p>
+//                 <p className="text-[#1C1B19]/70 text-sm leading-relaxed">
+//                   {solution.problem}
+//                 </p>
+//               </div>
+//               <div className="bg-[#F7F5F1] rounded-xl border border-[#1C1B19]/8 p-4">
+//                 <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-1.5">
+//                   Best for
+//                 </p>
+//                 <p className="text-[#1C1B19]/70 text-sm leading-relaxed">
+//                   {solution.forWho}
+//                 </p>
+//               </div>
+//             </div>
+//           </div>
+
+//           <div className="hidden lg:grid grid-cols-[7fr_3fr] divide-x divide-[#1C1B19]/8">
+
+//             <div className="px-7 py-7 flex flex-col gap-7">
+//               {solution.images.length > 0 && (
+//                 <section>
+//                   <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-3">
+//                     Preview
+//                   </p>
+//                   <ImageScroller images={solution.images} />
+//                 </section>
+//               )}
+//             </div>
+
+//             <div className="px-7 py-7 flex flex-col gap-8">
+//               <section>
+//                 <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-4">
+//                   How it works
+//                 </p>
+//                 <ol className="flex flex-col gap-4">
+//                   {solution.howItWorks.map((step, i) => (
+//                     <li key={i} className="flex gap-3 items-start">
+//                       <span
+//                         className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-mono font-bold mt-0.5"
+//                         style={{ backgroundColor: `${accent}18`, color: accent }}
+//                       >
+//                         {i + 1}
+//                       </span>
+//                       <span className="text-[#1C1B19]/70 text-sm leading-relaxed">
+//                         {step}
+//                       </span>
+//                     </li>
+//                   ))}
+//                 </ol>
+//               </section>
+
+//               <section>
+//                 <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-4">
+//                   What you get
+//                 </p>
+//                 <ul className="flex flex-col gap-3">
+//                   {solution.outcomes.map((outcome, i) => (
+//                     <li key={i} className="flex gap-3 items-start">
+//                       <span
+//                         className="flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center mt-0.5"
+//                         style={{ backgroundColor: `${accent}1F` }}
+//                       >
+//                         <Check size={9} color={accent} strokeWidth={3} />
+//                       </span>
+//                       <span className="text-[#1C1B19]/70 text-sm leading-relaxed">
+//                         {outcome}
+//                       </span>
+//                     </li>
+//                   ))}
+//                 </ul>
+//               </section>
+//             </div>
+//           </div>
+
+//           <div className="hidden lg:grid grid-cols-2 gap-5 px-7 pb-7">
+//             <div className="bg-[#F7F5F1] rounded-xl border border-[#1C1B19]/8 p-4">
+//               <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-2">
+//                 The problem
+//               </p>
+//               <p className="text-[#1C1B19]/70 text-sm leading-relaxed">
+//                 {solution.problem}
+//               </p>
+//             </div>
+//             <div className="bg-[#F7F5F1] rounded-xl border border-[#1C1B19]/8 p-4">
+//               <p className="text-[10px] font-mono uppercase tracking-widest text-[#1C1B19]/35 mb-1.5">
+//                 Best for
+//               </p>
+//               <p className="text-[#1C1B19]/70 text-sm leading-relaxed">
+//                 {solution.forWho}
+//               </p>
+//             </div>
+//           </div>
+//         </div>
+
+//         <div className="flex-shrink-0 border-t border-[#1C1B19]/10 px-5 sm:px-7 py-4">
+//           <a
+//             href="#contact"
+//             onClick={onClose}
+//             className="flex items-center justify-center gap-2 w-full px-6 py-3.5 rounded-xl text-white text-sm font-semibold tracking-wide transition-all duration-200 active:scale-[0.98]"
+//             style={{ backgroundColor: "#6D5DFC" }}
+//             onMouseEnter={(e) =>
+//               (e.currentTarget.style.backgroundColor = "#5849d4")
+//             }
+//             onMouseLeave={(e) =>
+//               (e.currentTarget.style.backgroundColor = "#6D5DFC")
+//             }
+//           >
+//             Book a call to learn more
+//             <ArrowUpRight size={16} strokeWidth={2} />
+//           </a>
+//         </div>
+//       </motion.div>
+//     </motion.div>
+//   );
+// }
 
 function SolutionCard({
   solution,
@@ -746,7 +936,7 @@ export default function SolutionsSection() {
   return (
     <section
       id="solutions"
-      className="bg-white py-24 px-6"
+      className="bg-white py-24 px-6 pt-36"
       style={{ fontFamily: "var(--font-nunito)" }}
     >
       <div className="max-w-7xl mx-auto">
@@ -755,7 +945,10 @@ export default function SolutionsSection() {
             className="font-display text-4xl sm:text-5xl font-bold text-[#1C1B19] leading-[1.05] max-w-xl"
             style={{ fontFamily: "var(--font-jakarta)" }}
           >
-            Everything your restaurant needs to run, grow, and retain.
+            Everything your restaurant needs to{" "}
+            <span className="bg-gradient-to-r from-[#6D5DFC] to-[#A855F7] bg-clip-text text-transparent">
+              run, grow, and retain.
+            </span>
           </h2>
           <p className="text-[#1C1B19]/55 mt-4 text-base max-w-lg leading-relaxed">
             Modular systems that work independently or together. Start with what
